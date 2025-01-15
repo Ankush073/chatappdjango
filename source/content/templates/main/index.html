@@ -1,0 +1,206 @@
+{% extends 'layouts/default/page.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}Chat App - Home{% endblock %}
+{% block content %}
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="user-profile">
+                {% if request.user.is_authenticated %}
+                    <img src="{{MEDIA_URL}}dp.png" alt="Profile" class="avatar">
+                    <span class="username">{{ request.user.username }}</span>
+                {% else %}
+                    <span class="guest-label">{% translate 'Guest' %}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Users List Section -->
+        <div class="users-section">
+            <div class="section-header">
+                <h2>Contacts</h2>
+                <button class="refresh-btn" title="Refresh users list">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            
+            <div class="users-list">
+                {% for user in all_users %}
+                    <a href="{% url 'chat' username=user.username %}" class="user-item">
+                        <img src="{{ MEDIA_URL }}dp.png" alt="{{ user.username }}" class="user-avatar">
+                        <div class="user-info">
+                            <span class="user-name">{{ user.username }}</span>
+                            <span class="user-status" data-user="{{ user.username }}">
+                                {% if user.userprofilemodel.online_status %}
+                                    <span class="status-dot online"></span>Online
+                                {% else %}
+                                    <span class="status-dot offline"></span>Offline
+                                {% endif %}
+                            </span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="welcome-message">
+            <h1>Welcome to Chat App</h1>
+            <p>Select a user from the sidebar to start chatting</p>
+        </div>
+    </main>
+</div>
+
+<style>
+.app-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f5f7fb;
+}
+
+.sidebar {
+    width: 300px;
+    background-color: #ffffff;
+    border-right: 1px solid #e1e4e8;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.avatar {
+    margin-top: 7px;
+    height: 30px;
+    width: 30px;
+}
+
+.username {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.users-section {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.section-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+}
+
+.section-header h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.refresh-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.refresh-btn:hover {
+    color: #1a1a1a;
+}
+
+.users-list {
+    padding: 0.5rem;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 8px;
+    margin-bottom: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.user-item:hover {
+    background-color: #f0f2f5;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.user-status {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.status-dot.online {
+    background-color: #22c55e;
+}
+
+.status-dot.offline {
+    background-color: #9ca3af;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.welcome-message {
+    text-align: center;
+    color: #666;
+}
+
+.welcome-message h1 {
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/online_status.js' %}"></script>
+{% endblock %}
