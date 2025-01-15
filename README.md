@@ -98,6 +98,3 @@ Once the server is running, open your browser and go to the URL specified above 
 
 Feel free to fork this project, make changes, and submit a pull request. Contributions are welcome!
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
